@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "281836157175",
+    "project_id": "uts-smt-2",
+    "storage_bucket": "uts-smt-2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:281836157175:android:a82088b17190e595e73bf2",
+        "android_client_info": {
+          "package_name": "com.briant.utssmt2"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "281836157175-tj7limhn89m7fqqc4dgjkvnlrmdleshq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCjkrBBJkrQgYPRAMCIFqBmzCBCFBkMTTo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "281836157175-tj7limhn89m7fqqc4dgjkvnlrmdleshq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
