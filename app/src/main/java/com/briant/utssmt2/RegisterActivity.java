@@ -166,8 +166,11 @@ public class RegisterActivity extends AppCompatActivity {
                         String modelId = databaseReference.push().getKey();
                         databaseReference.child("Users").child(modelId).setValue(uploadUser);
                         databaseReference.child("MasterPelanggan").child(modelId).setValue(uploadPelanggan);
-                        Toast.makeText(RegisterActivity.this, "Sukses Upload", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "Sukses Upload", Toast.LENGTH_SHORT).show();
                         progressBar.setVisibility(View.GONE);
+                        Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+                        intent.putExtra("email",email);
+                        startActivity(intent);
                         bersih();
                     }
                 });
@@ -181,7 +184,7 @@ public class RegisterActivity extends AppCompatActivity {
             @Override
             public void onFailure(@NonNull Exception e) {
                 progressBar.setVisibility(View.GONE);
-                Toast.makeText(RegisterActivity.this, "Gagal", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "Gagal", Toast.LENGTH_SHORT).show();
             }
         });
     }

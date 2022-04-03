@@ -20,10 +20,18 @@ import com.google.firebase.database.ValueEventListener;
 
 public class LoginActivity extends AppCompatActivity {
     TextInputLayout tvemail,tvpassword;
-    String email,password;
+    String email,password, stremail;
     Button btnlogin, btnregis;
     DatabaseReference firebaseDatabase;
     ProgressBar progressBar;
+
+    @Override
+    public void onStart(){
+        super.onStart();
+        Intent ambildata=getIntent();
+        stremail = ambildata.getStringExtra("email");
+        tvemail.getEditText().setText(stremail);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,12 +80,12 @@ public class LoginActivity extends AppCompatActivity {
                                 String pass = data.child("password").getValue().toString();
                                 String user = data.child("username").getValue().toString();
                                 if (pass.equals(password) && user.equals(email)) {
-                                    Toast.makeText(LoginActivity.this, "Login Berhasil", Toast.LENGTH_SHORT).show();
-                                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                                    Toast.makeText(getApplicationContext(), "Login Berhasil", Toast.LENGTH_SHORT).show();
+                                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                                     intent.putExtra("username", email);
                                     startActivity(intent);
                                 } else {
-                                    Toast.makeText(LoginActivity.this, "Username dan atau password salah", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(getApplicationContext(), "Username dan atau password salah", Toast.LENGTH_SHORT).show();
                                 }
                             }
                         }
