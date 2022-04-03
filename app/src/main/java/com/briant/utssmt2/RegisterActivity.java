@@ -4,14 +4,18 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.DatePickerDialog;
 import android.content.ContentResolver;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
 import android.webkit.MimeTypeMap;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
@@ -29,13 +33,17 @@ import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import java.util.Calendar;
+
 public class RegisterActivity extends AppCompatActivity {
     private TextInputLayout tvnama, tvemail, tvnohp, tvtgl, tvalamat, tvbank, tvcatatan, tvnorek;
+    TextInputEditText tanggal;
     ImageView imageView;
     ProgressBar progressBar;
     Button browse,save;
     private String nama,email,nohp,tgl,alamat,bank,catatan,norek;
     StorageReference storageReference = FirebaseStorage.getInstance().getReference();
+    DatabaseReference databaseReference =FirebaseDatabase.getInstance().getReference();
     Uri imageUri;
 
     @Override
@@ -46,6 +54,7 @@ public class RegisterActivity extends AppCompatActivity {
         tvemail = findViewById(R.id.txt_email);
         tvnohp = findViewById(R.id.txt_nohp);
         tvtgl = findViewById(R.id.txt_tgl);
+        tanggal = findViewById(R.id.inputtgl);
         tvalamat = findViewById(R.id.txt_alamat);
         tvbank = findViewById(R.id.txt_bank);
         tvnorek = findViewById(R.id.txt_norek);
@@ -54,6 +63,25 @@ public class RegisterActivity extends AppCompatActivity {
         progressBar = findViewById(R.id.progressBar);
         browse = findViewById(R.id.btn_browse);
         save = findViewById(R.id.btn_save);
+        Calendar calendar = Calendar.getInstance();
+        final int year = calendar.get(Calendar.YEAR);
+        final int month = calendar.get(Calendar.MONTH);
+        final int day = calendar.get(Calendar.DAY_OF_MONTH);
+
+        tanggal.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DatePickerDialog datePickerDialog = new DatePickerDialog(RegisterActivity.this, new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                        month = month+1;
+                        String date = dayOfMonth+"/"+month+"/"+year;
+                        tanggal.setText(date);
+                    }
+                },year,month,day);
+                datePickerDialog.show();
+            }
+        });
 
         save.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -133,17 +161,14 @@ public class RegisterActivity extends AppCompatActivity {
                 fileref.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                     @Override
                     public void onSuccess(Uri uri) {
+                        UploadUser uploadUser = new UploadUser(email,tgl);
                         UploadPelanggan uploadPelanggan = new UploadPelanggan(nama,nohp,alamat,email,tgl,bank,norek,catatan,uri.toString());
-                        //String modelId = dbPelanggan.push().getKey();
-                        //dbPelanggan.child(modelId).setValue(uploadPelanggan);
-                        FirebaseDatabase.getInstance("https://uts-smt-2-default-rtdb.asia-southeast1.firebasedatabase.app").getReference("MasterPelanggan")
-                                .setValue(uploadPelanggan).addOnCompleteListener(new OnCompleteListener<Void>() {
-                            @Override
-                            public void onComplete(@NonNull Task<Void> task) {
-                                Toast.makeText(RegisterActivity.this, "Sukses Upload", Toast.LENGTH_SHORT).show();
-                                progressBar.setVisibility(View.GONE);
-                            }
-                        });
+                        String modelId = databaseReference.push().getKey();
+                        databaseReference.child("Users").child(modelId).setValue(uploadUser);
+                        databaseReference.child("MasterPelanggan").child(modelId).setValue(uploadPelanggan);
+                        Toast.makeText(RegisterActivity.this, "Sukses Upload", Toast.LENGTH_SHORT).show();
+                        progressBar.setVisibility(View.GONE);
+                        bersih();
                     }
                 });
             }
@@ -186,5 +211,14 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private void bersih(){
+        tvnama.getEditText().setText("");
+        tvnohp.getEditText().setText("");
+        tvalamat.getEditText().setText("");
+        tvemail.getEditText().setText("");
+        tvtgl.getEditText().setText("");
+        tvbank.getEditText().setText("");
+        tvnorek.getEditText().setText("");
+        tvcatatan.getEditText().setText("");
+        imageView.setImageURI(null);
     }
 }

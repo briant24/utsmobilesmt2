@@ -4,8 +4,7 @@ import java.security.PublicKey;
 
 public class UploadPelanggan {
     public String nama,nohp,alamat,email,tanggal,bank,norek,catatan,url;
-    public UploadPelanggan(){
-
+    public UploadPelanggan() {
     }
 
     public UploadPelanggan(String nama,String nohp,String alamat,String email,String tanggal,String bank,String norek,String catatan,String url){
