@@ -190,17 +190,17 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
 
-    private String getFileExtension(Uri mUri){
-        ContentResolver cr = getContentResolver();
-        MimeTypeMap mime = MimeTypeMap.getSingleton();
-        return mime.getExtensionFromMimeType(cr.getType(mUri));
-    }
-
     private void pilihgambar() {
         Intent gallerryIntent = new Intent();
         gallerryIntent.setAction(Intent.ACTION_GET_CONTENT);
         gallerryIntent.setType("image/*");
         startActivityForResult(gallerryIntent,2);
+    }
+
+    private String getFileExtension(Uri mUri){
+        ContentResolver cr = getContentResolver();
+        MimeTypeMap mime = MimeTypeMap.getSingleton();
+        return mime.getExtensionFromMimeType(cr.getType(mUri));
     }
 
     @Override
